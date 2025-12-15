@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Workout Streak</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #000, #222);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+  }
+  .card {
+    background: #111;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 0 30px rgba(255,255,255,0.1);
+    max-width: 320px;
+    width: 100%;
+  }
+  h1 {
+    margin: 0;
+    font-size: 24px;
+  }
+  .day {
+    font-size: 56px;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #00ff99;
+  }
+  .text {
+    opacity: 0.8;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>💪 Workout Day</h1>
+  <div class="day" id="day">0</div>
+  <div class="text">
+    Started on <br>
+    <b>01 January 2025</b>
+  </div>
+</div>
+
+<script>
+  const startDate = new Date("2025-08-29");
+  const today = new Date();
+
+  const diffTime = today - startDate;
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+  document.getElementById("day").innerText = diffDays;
+</script>
+
+</body>
+</html>
