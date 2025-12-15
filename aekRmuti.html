@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Workout LEGEND MODE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --neon:#00ff99;
+  --bg:#000;
+  --card:#111;
+}
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+  background:radial-gradient(circle at top,#111,#000);
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+}
+
+.container{
+  width:100%;
+  max-width:390px;
+  padding:20px;
+}
+
+.card{
+  background:linear-gradient(180deg,#141414,#0a0a0a);
+  border-radius:28px;
+  padding:26px 20px;
+  text-align:center;
+  box-shadow:0 0 50px rgba(0,255,153,.3);
+  margin-bottom:20px;
+}
+
+h1{
+  margin:0;
+  font-size:22px;
+  letter-spacing:1px;
+  opacity:.9;
+}
+
+.day{
+  font-size:78px;
+  font-weight:900;
+  color:var(--neon);
+  margin:6px 0;
+  text-shadow:0 0 16px rgba(0,255,153,.9);
+}
+
+.ymd{
+  font-size:14px;
+  opacity:.85;
+}
+
+.stats{
+  display:flex;
+  justify-content:space-between;
+  margin-top:14px;
+}
+
+.stat{
+  width:48%;
+  background:#0b0b0b;
+  border-radius:18px;
+  padding:12px 8px;
+  font-size:13px;
+}
+
+.stat b{
+  display:block;
+  font-size:22px;
+  color:var(--neon);
+}
+
+.ring-wrap{
+  width:170px;
+  height:170px;
+  margin:20px auto;
+  position:relative;
+}
+
+svg{transform:rotate(-90deg)}
+.ring-bg{stroke:#222}
+.ring{
+  stroke:var(--neon);
+  stroke-linecap:round;
+  filter:drop-shadow(0 0 8px rgba(0,255,153,.8));
+}
+
+.center{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:13px;
+}
+
+.checkin{
+  margin-top:14px;
+  padding:14px;
+  border-radius:18px;
+  background:var(--neon);
+  color:#000;
+  font-weight:bold;
+  border:none;
+  width:100%;
+  font-size:15px;
+}
+
+.checkin.done{
+  background:#222;
+  color:#777;
+}
+
+.inputs{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.inputs input{
+  width:50%;
+  padding:12px;
+  border-radius:14px;
+  border:none;
+  background:#111;
+  color:#fff;
+  font-size:14px;
+}
+
+.badges{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+
+.badge{
+  padding:6px 12px;
+  border-radius:20px;
+  border:1px solid #222;
+  font-size:12px;
+  opacity:.3;
+}
+
+.badge.active{
+  opacity:1;
+  color:var(--neon);
+  border-color:var(--neon);
+  box-shadow:0 0 10px rgba(0,255,153,.4);
+}
+
+.subtitle{
+  margin-top:12px;
+  font-size:13px;
+  opacity:.75;
+  line-height:1.6;
+}
+
+footer{
+  text-align:center;
+  font-size:11px;
+  opacity:.4;
+  margin-bottom:20px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="card">
+<h1>💪 WORKOUT DAY</h1>
+<div class="day" id="day">0</div>
+<div class="ymd" id="ymd"></div>
+
+<div class="stats">
+  <div class="stat">⏱ Hours<b id="hours">0</b></div>
+  <div class="stat">🏃 KM<b id="km">0</b></div>
+</div>
+
+<div class="ring-wrap">
+<svg width="170" height="170">
+  <circle cx="85" cy="85" r="75" stroke-width="10" fill="none" class="ring-bg"/>
+  <circle cx="85" cy="85" r="75" stroke-width="10" fill="none" class="ring" id="ring"/>
+</svg>
+<div class="center" id="streakText">🔥 0 Day Streak</div>
+</div>
+
+<div class="inputs">
+  <input type="number" id="addHour" placeholder="⏱ ชั่วโมงวันนี้">
+  <input type="number" id="addKm" placeholder="🏃 KM วันนี้">
+</div>
+
+<button class="checkin" id="checkinBtn">🔥 วันนี้ออกกำลังกายแล้ว</button>
+
+<div class="badges">
+  <div class="badge" data-d="7">7D</div>
+  <div class="badge" data-d="30">30D</div>
+  <div class="badge" data-d="60">60D</div>
+  <div class="badge" data-d="100">100D</div>
+  <div class="badge" data-d="365">365D</div>
+</div>
+
+<div class="subtitle">
+🏋️‍♂️ Weights · 🏃‍♂️ Run · 🪢 Jump Rope<br>
+Started <b>29 Aug 2025</b>
+</div>
+</div>
+
+<footer>No excuses. No zero day.</footer>
+</div>
+
+<script>
+// ===== CONFIG =====
+const startDate = new Date(2025,7,29);
+const today = new Date();
+const todayKey = today.toDateString();
+
+// ===== DAY COUNT =====
+const totalDays = Math.max(Math.floor((today - startDate)/86400000)+1,0);
+let cur=0,step=Math.ceil(totalDays/40);
+const anim=setInterval(()=>{
+  cur+=step;
+  if(cur>=totalDays){cur=totalDays;clearInterval(anim);}
+  day.innerText=cur;
+},25);
+
+// ===== YMD =====
+let y=today.getFullYear()-startDate.getFullYear();
+let m=today.getMonth()-startDate.getMonth();
+let d=today.getDate()-startDate.getDate();
+if(d<0){m--;d+=new Date(today.getFullYear(),today.getMonth(),0).getDate();}
+if(m<0){y--;m+=12;}
+ymd.innerText=`${y} ปี ${m} เดือน ${d} วัน`;
+
+// ===== STORAGE =====
+let streak=+localStorage.getItem("streak")||0;
+let lastCheck=localStorage.getItem("lastCheck");
+let totalHours=+localStorage.getItem("hours")||0;
+let totalKm=+localStorage.getItem("km")||0;
+
+// Reset streak if missed
+if(lastCheck){
+  const diff=(today-new Date(lastCheck))/86400000;
+  if(diff>1) streak=0;
+}
+
+// Display
+hours.innerText=totalHours;
+km.innerText=totalKm;
+streakText.innerText=`🔥 ${streak} Day Streak`;
+
+// Checked today?
+if(lastCheck===todayKey){
+  checkinBtn.classList.add("done");
+  checkinBtn.innerText="✅ วันนี้เช็คอินแล้ว";
+}
+
+// Check-in
+checkinBtn.onclick=()=>{
+  if(lastCheck===todayKey) return;
+
+  const h=+addHour.value||0;
+  const k=+addKm.value||0;
+
+  totalHours+=h;
+  totalKm+=k;
+  streak++;
+
+  localStorage.setItem("hours",totalHours);
+  localStorage.setItem("km",totalKm);
+  localStorage.setItem("streak",streak);
+  localStorage.setItem("lastCheck",todayKey);
+
+  hours.innerText=totalHours;
+  km.innerText=totalKm;
+  streakText.innerText=`🔥 ${streak} Day Streak`;
+
+  checkinBtn.classList.add("done");
+  checkinBtn.innerText="✅ วันนี้เช็คอินแล้ว";
+
+  updateBadges();
+};
+
+// ===== RING =====
+const r=75,circ=2*Math.PI*r;
+ring.style.strokeDasharray=circ;
+ring.style.strokeDashoffset=circ*(1-Math.min(totalDays/365,1));
+
+// ===== BADGES =====
+function updateBadges(){
+  document.querySelectorAll(".badge").forEach(b=>{
+    if(streak>=+b.dataset.d) b.classList.add("active");
+  });
+}
+updateBadges();
+</script>
+</body>
+</html>
