@@ -1,112 +1,183 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>Workout Progress</title>
+<title>Workout Discipline</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
+  :root {
+    --neon: #00ff99;
+    --dark: #0b0b0b;
+    --card: #121212;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-    background: linear-gradient(135deg, #000, #1a1a1a);
+    background: radial-gradient(circle at top, #111, #000);
     color: white;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
   }
+
   .container {
     width: 100%;
-    max-width: 360px;
+    max-width: 380px;
     padding: 20px;
   }
+
   .card {
-    background: #111;
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 0 30px rgba(0,255,153,0.15);
+    background: linear-gradient(180deg, #141414, #0a0a0a);
+    border-radius: 24px;
+    padding: 30px 20px;
+    box-shadow:
+      0 0 40px rgba(0,255,153,0.25),
+      inset 0 0 20px rgba(255,255,255,0.02);
     text-align: center;
+    animation: fadeIn 0.8s ease;
   }
+
   h1 {
     margin: 0;
-    font-size: 24px;
+    font-size: 22px;
+    letter-spacing: 1px;
+    opacity: 0.9;
   }
+
   .day {
-    font-size: 64px;
-    font-weight: bold;
-    color: #00ff99;
-    margin: 15px 0;
+    font-size: 72px;
+    font-weight: 900;
+    color: var(--neon);
+    margin: 10px 0;
+    text-shadow:
+      0 0 10px rgba(0,255,153,0.8),
+      0 0 30px rgba(0,255,153,0.4);
   }
+
+  .ymd {
+    font-size: 15px;
+    margin-bottom: 18px;
+    opacity: 0.85;
+  }
+
   .subtitle {
     font-size: 14px;
-    opacity: 0.85;
-    line-height: 1.6;
+    line-height: 1.7;
+    opacity: 0.8;
   }
-  .buttons {
-    margin-top: 25px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #00ff99, transparent);
+    margin: 18px 0;
+    opacity: 0.4;
   }
-  a.btn {
-    text-decoration: none;
-    background: #00ff99;
-    color: #000;
-    padding: 14px;
-    border-radius: 14px;
-    font-weight: bold;
-    transition: transform 0.1s, box-shadow 0.1s;
+
+  .quote {
+    font-size: 13px;
+    opacity: 0.6;
+    letter-spacing: 0.5px;
   }
-  a.btn.secondary {
-    background: #222;
-    color: #fff;
-    border: 1px solid #333;
-  }
-  a.btn:active {
-    transform: scale(0.97);
-  }
+
   footer {
-    margin-top: 20px;
-    font-size: 12px;
-    opacity: 0.5;
+    margin-top: 16px;
     text-align: center;
+    font-size: 11px;
+    opacity: 0.4;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 </style>
 </head>
+
 <body>
 
 <div class="container">
   <div class="card">
-    <h1>💪 Workout Day</h1>
+    <h1>💪 WORKOUT DAY</h1>
+
+    <!-- DAY -->
     <div class="day" id="day">0</div>
+
+    <!-- Y M D -->
+    <div class="ymd" id="ymd">0 ปี 0 เดือน 0 วัน</div>
+
+    <div class="divider"></div>
+
     <div class="subtitle">
       🏋️‍♂️ Weights · 🏃‍♂️ Run · 🪢 Jump Rope<br>
       Started <b>29 Aug 2025</b>
     </div>
 
-    <div class="buttons">
-      <a class="btn" href="#" onclick="alert('Consistency beats motivation 💪')">
-        🔥 Daily Discipline
-      </a>
-      <a class="btn secondary" href="https://www.tiktok.com" target="_blank">
-        🎥 TikTok Profile
-      </a>
+    <div class="divider"></div>
+
+    <div class="quote">
+      Consistency beats motivation
     </div>
   </div>
 
   <footer>
-    No excuses. Just work.
+    No excuses. No zero day.
   </footer>
 </div>
 
 <script>
-  const startDate = new Date("2025-08-29");
+  // ===== START DATE =====
+  const startDate = new Date(2025, 7, 29); // Aug = 7
   const today = new Date();
 
+  // ===== TOTAL DAYS =====
   const diffTime = today - startDate;
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+  const totalDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
-  document.getElementById("day").innerText = diffDays > 0 ? diffDays : 0;
+  // ===== Animate Day =====
+  let count = 0;
+  const target = totalDays > 0 ? totalDays : 0;
+  const step = Math.ceil(target / 40);
+
+  const counter = setInterval(() => {
+    count += step;
+    if (count >= target) {
+      count = target;
+      clearInterval(counter);
+    }
+    document.getElementById("day").innerText = count;
+  }, 30);
+
+  // ===== YEAR / MONTH / DAY =====
+  let years = today.getFullYear() - startDate.getFullYear();
+  let months = today.getMonth() - startDate.getMonth();
+  let days = today.getDate() - startDate.getDate();
+
+  if (days < 0) {
+    months--;
+    const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+    days += prevMonth.getDate();
+  }
+
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+
+  document.getElementById("ymd").innerText =
+    `${years} ปี ${months} เดือน ${days} วัน`;
 </script>
 
 </body>
