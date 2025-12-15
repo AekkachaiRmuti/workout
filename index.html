@@ -2,53 +2,101 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Workout Streak</title>
+<title>Workout Progress</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #000, #222);
+    font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    background: linear-gradient(135deg, #000, #1a1a1a);
     color: white;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    text-align: center;
+  }
+  .container {
+    width: 100%;
+    max-width: 360px;
+    padding: 20px;
   }
   .card {
     background: #111;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 0 30px rgba(255,255,255,0.1);
-    max-width: 320px;
-    width: 100%;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 0 30px rgba(0,255,153,0.15);
+    text-align: center;
   }
   h1 {
     margin: 0;
     font-size: 24px;
   }
   .day {
-    font-size: 56px;
+    font-size: 64px;
     font-weight: bold;
-    margin: 20px 0;
     color: #00ff99;
+    margin: 15px 0;
   }
-  .text {
-    opacity: 0.8;
+  .subtitle {
     font-size: 14px;
+    opacity: 0.85;
+    line-height: 1.6;
+  }
+  .buttons {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  a.btn {
+    text-decoration: none;
+    background: #00ff99;
+    color: #000;
+    padding: 14px;
+    border-radius: 14px;
+    font-weight: bold;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  a.btn.secondary {
+    background: #222;
+    color: #fff;
+    border: 1px solid #333;
+  }
+  a.btn:active {
+    transform: scale(0.97);
+  }
+  footer {
+    margin-top: 20px;
+    font-size: 12px;
+    opacity: 0.5;
+    text-align: center;
   }
 </style>
 </head>
 <body>
 
-<div class="card">
-  <h1>💪 Workout Day</h1>
-  <div class="day" id="day">0</div>
-  <div class="text">
-    Started on <br>
-    <b>29 August 2025 </b>
+<div class="container">
+  <div class="card">
+    <h1>💪 Workout Day</h1>
+    <div class="day" id="day">0</div>
+    <div class="subtitle">
+      🏋️‍♂️ Weights · 🏃‍♂️ Run · 🪢 Jump Rope<br>
+      Started <b>29 Aug 2025</b>
+    </div>
+
+    <div class="buttons">
+      <a class="btn" href="#" onclick="alert('Consistency beats motivation 💪')">
+        🔥 Daily Discipline
+      </a>
+      <a class="btn secondary" href="https://www.tiktok.com" target="_blank">
+        🎥 TikTok Profile
+      </a>
+    </div>
   </div>
+
+  <footer>
+    No excuses. Just work.
+  </footer>
 </div>
 
 <script>
@@ -58,7 +106,7 @@
   const diffTime = today - startDate;
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
-  document.getElementById("day").innerText = diffDays;
+  document.getElementById("day").innerText = diffDays > 0 ? diffDays : 0;
 </script>
 
 </body>
